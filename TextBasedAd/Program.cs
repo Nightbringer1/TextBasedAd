@@ -10,7 +10,8 @@
             {
                 Console.Clear();
 
-                Character player = ; //to be implemented
+                Character player = Character.CreateCharacter(); 
+
 
                 Console.WriteLine("Greetings Adventurer, you find yourself in a dark forest.....");
                 Console.WriteLine("You see two paths ahead, one goes right, the other goes left.");
