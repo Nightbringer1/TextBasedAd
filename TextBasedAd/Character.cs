@@ -60,7 +60,10 @@ namespace TextBasedAd
             character.Health = totalPoints;
 
             Console.WriteLine($"Remaining {totalPoints} have been assigned to Health");
+            
+            Console.WriteLine($"The stats of {character}");
             character.DisplayStats();
+            
             return character;
         }
         public static int AllocateStat(string statName, ref int remainingPoints)
@@ -79,6 +82,31 @@ namespace TextBasedAd
                 {
                     Console.WriteLine("Invalid Entry please enter a number within the allowed range.");
                 }
+            }
+
+        }
+        public void ModifyStat(string stat, int amount)
+        {
+            switch (stat.ToLower())
+            {
+                case "strength":
+                    Strength = Math.Max(0, Strength + amount);
+                    break;
+                case "intellect":
+                    Intellect = Math.Max(0, Intellect + amount);
+                    break;
+                case "perception":
+                    Perception = Math.Max(0, Perception + amount);
+                    break;
+                case "agility":
+                    Agility = Math.Max(0, Agility + amount);
+                    break;
+                case "health":
+                    Health = Math.Max(0, Health + amount);
+                    break;
+                default:
+                    Console.WriteLine("not used");
+                    break;
             }
         }
     }

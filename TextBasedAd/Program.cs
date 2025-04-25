@@ -1,4 +1,6 @@
-﻿namespace TextBasedAd
+﻿using System.Numerics;
+
+namespace TextBasedAd
 {
     internal class Program
     {
@@ -23,7 +25,7 @@
                 if (choice == "stats")
                 {
                     player.DisplayStats();
-                    continue; // Re-prompt the question
+                    continue;
                 }
 
                 if (choice == "left")
@@ -41,6 +43,7 @@
 
         static void EnterCabin(Character player)
         {
+            RandomEvent();
             Console.WriteLine("You walk down the left pathway, you walk down the narrow pathway, at its ending lies a cabin!");
             Console.WriteLine("");
             string action = GetUserInput(new List<string> { "enter", "continue" }, "Do you'Enter' the cabin? or 'continue' down the path?");
@@ -58,7 +61,7 @@
                     Console.WriteLine("The door begins to creak under the force being placed upon the hinges");
                     Console.WriteLine("As the door hinges begin to creak and moan under the force, you miss the sound of the wooden floor beneath you giving away");
                     Console.WriteLine("You fall into a pit of broken planks, breaking your ankle and fracturing your arm, you cant stand nevermind climb out.");
-                    Console.WriteLine("You wait days for people to come, before you pass out from pain and hunger. You died.");
+                    DeathMessage(player);
                 }
                 else if (cabinAction == "explore")
                 {
@@ -80,8 +83,7 @@
                     {
                         Console.WriteLine("You push yourself through the hole, and begin sprinting away from the death trap of a cabin. ");
                         Console.WriteLine("As you look around, you have no idea where you are in the forest. You realise youve been running around in circles for what feels like days.");
-                        Console.WriteLine("Your story ends here, if only there was a map or something from within the cabin to aid you in your escape from the dark forest.");
-                        RestartGame(player);
+                        DeathMessage(player);
                     }
                 }
             }
@@ -91,15 +93,64 @@
                 Console.WriteLine("Eventually you begin to hear the faint sound of a distant a river.");
                 Console.WriteLine("Realising you are thristy and havent drank in some time you walk towards the sound");
                 Console.WriteLine("you lean forward over the river and begin to frantically scoop water into your mouth, gulping down the fresh water.");
-                Console.WriteLine("you realise too late that your footing on the edge has slipped, and you fall into the river. carried away by the stream you drown.");
+                if (player.Perception >= 4)
+                {
+                    Console.WriteLine("as you're leaning forward, you begin to feel the ground shift under your weight, realising that you're on unstable ground you shift back quickly!");
+                    if (player.Agility >= 3)
+                    {
+                        Console.WriteLine("Your quick reactions save your life!");
+                        Console.WriteLine("You watch as the riverbank before you crumbles into the river.");
+                        Console.WriteLine("you'd surely have falled into the river if not for your Perception and Agility!");
+
+                    }
+                    else
+                        DeathMessage(player);
+
+                }
+                else
+                    DeathMessage(player);
+                
                 RestartGame(player);
             }
         }
 
         static void EnterBog(Character player)
         {
-            // Implementation for EnterBog
+            Console.WriteLine("You wander into a deep bog, the wet ground beneath you starts to slush and rise up to meet your footfall as you walk");
+            Console.WriteLine("as you persist further into the bog, you begin to tire, even starting to stumble as you push onwards.");
+            player.ModifyStat("strength", -1);
+            Console.WriteLine("You feel drained. Your Strength is reduced by 1.");
+            if (player.Perception >= 5)
+            {
+                Console.WriteLine("You feel the vibrations of something else in the water.");
+                Console.WriteLine("as your eyes scan around you see the big yellow eyes of a crocodile staring back at you");
+                if (player.Intellect >= 4)
+                {
+                    Console.WriteLine("You remember reading that crocodiles mainly hunt using ambush tactics, by staying away and keeping your guard up, you should be majorly safe!");
+
+                }
+                else if (player.Strength >= 5)
+                {
+                    Console.WriteLine("You have no care for the crocodile that hunts you, believing that you are the predator and it is your prey.");
+                    Console.WriteLine("In fact you hope the beast approaches you, looking eagerly for a fight!");
+                    Console.WriteLine("The crocodile, sensing your bloodlust, realises you arent the easy meal it planned and backs off into the swamp.");
+                }
+                else
+                {
+                    Console.WriteLine("you carry on walking, completely aware of the crocodile, but unfortunately ill-equipped to deal with it head on.");
+                    Console.WriteLine("the crocodile, sensing you are no real threat as well as slowed down by the bog underfoot.");
+                    DeathMessage(player);
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("your tiredness numbs your senses, you dont notice that you are being stalked by a giant beast.");
+                Console.WriteLine("Your lack of Perception leads you to being hunted by a Crocodile, the beast lurches forward and pulls you deeper into the swamp.");
+                DeathMessage(player);
+            }
         }
+
 
         public static void RestartGame(Character player)
         {
@@ -137,6 +188,13 @@
             }
         }
 
+        public static void DeathMessage(Character player)
+        {
+            Console.WriteLine("Unfortunately, you have died, there was a way for you to have survived");
+            Console.WriteLine("Maybe with different stats or if you found an item to help.");
+            Console.WriteLine("the outcome would be different, Please try again!");
+            RestartGame(player);
+        }
 
         public static string GetUserInput(List<string> validChoices, string prompt)
         {
